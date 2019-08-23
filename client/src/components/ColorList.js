@@ -12,6 +12,7 @@ const ColorList = ({ colors, updateColors }) => {
   const [editing, setEditing] = useState(false)
   const [colorToEdit, setColorToEdit] = useState(initialColor)
   const [colorToAdd, setColorToAdd] = useState(initialColor)
+  const [addError, setAddError] = useState('')
 
   const editColor = (color) => {
     setEditing(true)
@@ -44,12 +45,14 @@ const ColorList = ({ colors, updateColors }) => {
   const addColor = (e) => {
     e.preventDefault()
 
-    axiosWithAuth()
-      .post('http://localhost:5001/api/colors', colorToAdd)
-      .then((res) => {
-        console.log('added color res', res)
-      })
-      .catch((err) => console.log('addColor error!', err.response))
+    colors.filter((color) => colorToAdd.color === color.color).length > 0
+      ? setAddError('Color name already exists!')
+      : axiosWithAuth()
+          .post('http://localhost:5001/api/colors', colorToAdd)
+          .then((res) => {
+            console.log('added color res', res)
+          })
+          .catch((err) => console.log('addColor error!', err.response))
   }
 
   return (
@@ -102,16 +105,17 @@ const ColorList = ({ colors, updateColors }) => {
         </form>
       )}
 
-      {/* <div className='spacer' > */}
       <div className='new-color'>
         <form onSubmit={addColor}>
+          {addError ? <p>{addError}</p> : null}
           <legend>Add color</legend>
           <label>
             color name:
             <input
-              onChange={(e) =>
+              onChange={(e) => {
+                setAddError('')
                 setColorToAdd({ ...colorToAdd, color: e.target.value })
-              }
+              }}
               value={colorToAdd.color}
             />
           </label>
@@ -132,6 +136,7 @@ const ColorList = ({ colors, updateColors }) => {
           </div>
         </form>
       </div>
+      <div className='spacer' />
     </div>
   )
 }
