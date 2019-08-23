@@ -7,7 +7,6 @@ const Login = () => {
     password: ''
   })
 
-  console.log('creds:', credentials)
   const handleChange = (e) => {
     setCredentials({
       ...credentials,
@@ -22,7 +21,7 @@ const Login = () => {
       .then((res) => {
         localStorage.setItem('token', res.data.payload)
       })
-      .catch((err) => console.log('unable to login!',err.response))
+      .catch((err) => console.log('Unable to login!', err.response))
   }
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
