@@ -23,7 +23,7 @@ const ColorList = ({ colors, updateColors }) => {
     e.preventDefault()
 
     axiosWithAuth()
-      .put(`http://localhost:5001/api/colors/${colorToEdit.id}`, colorToEdit)
+      .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
       .then((res) => {
         setColorToEdit(initialColor)
         setEditing(false)
@@ -35,7 +35,7 @@ const ColorList = ({ colors, updateColors }) => {
     e.preventDefault()
 
     axiosWithAuth()
-      .delete(`http://localhost:5001/api/colors/${colorToAdd.id}`)
+      .delete(`http://localhost:5000/api/colors/${colorToAdd.id}`)
       .then((res) => {
         setColorToAdd(initialColor)
       })
@@ -48,7 +48,7 @@ const ColorList = ({ colors, updateColors }) => {
     colors.filter((color) => colorToAdd.color === color.color).length > 0
       ? setAddError('Color name already exists!')
       : axiosWithAuth()
-          .post('http://localhost:5001/api/colors', colorToAdd)
+          .post('http://localhost:5000/api/colors', colorToAdd)
           .then((res) => {
             console.log('added color res', res)
           })
