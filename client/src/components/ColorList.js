@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-// import axios from "axios";
 import { axiosWithAuth } from '../utils/axiosWithAuth'
 
 const initialColor = {
@@ -8,7 +7,6 @@ const initialColor = {
 }
 
 const ColorList = ({ colors, updateColors }) => {
-  // console.log(colors)
   const [editing, setEditing] = useState(false)
   const [colorToEdit, setColorToEdit] = useState(initialColor)
   const [colorToAdd, setColorToAdd] = useState(initialColor)
@@ -21,7 +19,6 @@ const ColorList = ({ colors, updateColors }) => {
 
   const saveEdit = (e) => {
     e.preventDefault()
-
     axiosWithAuth()
       .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
       .then((res) => {
@@ -31,11 +28,9 @@ const ColorList = ({ colors, updateColors }) => {
       .catch((err) => console.log('saveEdit error!', err.response))
   }
 
-  const deleteColor = (e) => {
-    e.preventDefault()
-
+  const deleteColor = (color) => {
     axiosWithAuth()
-      .delete(`http://localhost:5000/api/colors/${colorToAdd.id}`)
+      .delete(`http://localhost:5000/api/colors/${color.id}`)
       .then((res) => {
         setColorToAdd(initialColor)
       })
@@ -44,7 +39,6 @@ const ColorList = ({ colors, updateColors }) => {
 
   const addColor = (e) => {
     e.preventDefault()
-
     colors.filter((color) => colorToAdd.color === color.color).length > 0
       ? setAddError('Color name already exists!')
       : axiosWithAuth()
@@ -60,12 +54,12 @@ const ColorList = ({ colors, updateColors }) => {
       <p>colors</p>
       <ul>
         {colors.map((color) => (
-          <li key={color.color} onClick={() => editColor(color)}>
+          <li key={color.color}>
             <span>
               <span className='delete' onClick={() => deleteColor(color)}>
                 x
               </span>{' '}
-              {color.color}
+              <span onClick={() => editColor(color)}>{color.color}</span>
             </span>
             <div
               className='color-box'
